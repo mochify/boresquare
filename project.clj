@@ -1,12 +1,11 @@
 (defproject boresquare "0.1.0-SNAPSHOT"
-  :description "Where were you on a given date?"
-  :url "http://example.com/FIXME"
- :license {
-    :name "Apache License, version 2.0"
-    :url "http://www.apache.org/licenses/LICENSE-2.0"}
+  :description "Awesome Foursquare enhancements for you."
+  :url "http://mochify.github.io/boresquare"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [compojure "1.1.6"]
-                 [enlive "1.1.5"]]
+                 [ring "1.2.1"]
+                 [enlive "1.1.5"]
+                 [http-kit "2.1.13"]]
   :plugins [[lein-ring "0.8.8"]]
   :ring {:handler boresquare.handler/app}
   :profiles
