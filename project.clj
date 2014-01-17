@@ -5,9 +5,20 @@
                  [compojure "1.1.6"]
                  [ring "1.2.1"]
                  [enlive "1.1.5"]
-                 [http-kit "2.1.13"]]
-  :plugins [[lein-ring "0.8.8"]]
-  :ring {:handler boresquare.handler/app}
+                 [http-kit "2.1.16"]
+                 [com.taoensso/carmine "2.4.0"]
+                 [korma "0.3.0-RC6"]
+                 [org.xerial/sqlite-jdbc "3.7.2"]
+                 [info.cukes/cucumber-junit "1.1.5"]
+                 [info.cukes/cucumber-clojure "1.1.5"]
+                 [junit/junit "4.11"]
+                 [environ "0.4.0"]
+                 [lein-light-nrepl "0.0.10"]
+                 [org.clojure/clojurescript "0.0-2138"]]
+  :repl-options {:nrepl-middleware [lighttable.nrepl.handler/lighttable-ops]}
+  :plugins [[lein-ring "0.8.8"]
+            [lein-environ "0.4.0"]]
+  :ring {:handler boresquare.routes/app}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                         [ring-mock "0.1.5"]]}})
