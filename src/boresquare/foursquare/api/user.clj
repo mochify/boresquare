@@ -32,14 +32,20 @@
 (defrecord FoursquareApiEndpoint
   [protocol url version])
 
+
+
 (defn make-api-endpoint
   ([protocol host] (FoursquareApiEndpoint. protocol host nil))
   ([protocol host version] (FoursquareApiEndpoint. protocol host version)))
 
 (def ^{:dynamic true} *api-endpoint* ())
 
-(defn post
-  [^String uri ])
+(defn create-uri
+  [& segments]
+  (str (:uri *api-endpoint*)))
+
+(defn get
+  [^String uri]
 
 (defn make-uri
   "Creates a Foursquare API URI from a FoursquareApiEndpoint"
@@ -47,6 +53,10 @@
    resource-path]
 
 
-(defn user
-  "Returns information for the self user"
-  (
+(defn users-self
+  "Returns information for the self user, hitting the endpoint:
+
+  users/self
+  "
+  []
+  (let [result (get ())])

@@ -9,9 +9,14 @@
 
 (def ^{:dynamic true} *api-endpoint* ())
 
-(defmacro def-foursquare-endpoint
-  [verb resource-path & rest]
-  ())
+(defn make-uri
+  "Creates a Foursquare API URI from a FoursquareApiEndpoint"
+  [^FoursquareApiEndpoint endpoint
+   resource-path)
+
+;(defmacro def-foursquare-endpoint
+;  [verb resource-path & rest]
+;  ())
 
 ;; API details to follow
 
