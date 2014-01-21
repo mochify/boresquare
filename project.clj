@@ -14,7 +14,8 @@
                  [junit/junit "4.11"]
                  [environ "0.4.0"]
                  [lein-light-nrepl "0.0.10"]
-                 [org.clojure/clojurescript "0.0-2138"]]
+                 [org.clojure/clojurescript "0.0-2138"]
+                 [clj-oauth "1.4.1"]]
   :repl-options {:nrepl-middleware [lighttable.nrepl.handler/lighttable-ops]}
   :plugins [[lein-ring "0.8.8"]
             [lein-environ "0.4.0"]]
