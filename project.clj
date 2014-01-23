@@ -16,11 +16,13 @@
                  [lein-light-nrepl "0.0.10"]
                  [org.clojure/clojurescript "0.0-2138"]
                  [clj-oauth "1.4.1"]
-                 [cheshire "5.3.1"]]
+                 [cheshire "5.3.1"]
+                 [clj-time "0.6.0"]]
   :repl-options {:nrepl-middleware [lighttable.nrepl.handler/lighttable-ops]}
   :plugins [[lein-ring "0.8.8"]
             [lein-environ "0.4.0"]]
   :ring {:handler boresquare.routes/app}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
-                        [ring-mock "0.1.5"]]}})
+                        [ring-mock "0.1.5"]
+                        [criterium "0.4.3"]]}})

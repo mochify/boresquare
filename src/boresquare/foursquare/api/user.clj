@@ -1,7 +1,9 @@
 (ns boresquare.foursquare.api.user
+  (:refer-clojure :exclude [get])
   (:require [environ.core :as env]
             [org.httpkit.client :as http]
-            [cheshire.core :as json]))
+            [cheshire.core :as json]
+            [clojure.string :refer [join]]))
 
 ;; This wraps the Foursquare User API
 ;; https://developer.foursquare.com/docs/users/users
@@ -29,28 +31,45 @@
 ;; users/USER_ID/unfriend
 ;; users/self/update ; updates a user's photo
 
+
 (defrecord FoursquareApiEndpoint
-  [protocol url version])
+  [protocol uri version])
 
+(def ^{:const true} current (.format (java.text.SimpleDateFormat. "YYYYMMDD") (java.util.Date.)))
 
+(def ^{:const true} slash "/")
+(def ^{:const true} encoding "UTF-8")
 
 (defn make-api-endpoint
-  ([protocol host] (FoursquareApiEndpoint. protocol host nil))
-  ([protocol host version] (FoursquareApiEndpoint. protocol host version)))
+  ([protocol uri] (FoursquareApiEndpoint. protocol uri nil))
+  ([protocol uri version] (FoursquareApiEndpoint. protocol uri version)))
 
-(def ^{:dynamic true} *api-endpoint* ())
+(def ^{:dynamic true} *api-endpoint* (make-api-endpoint "https" "api.foursquare.com" "v2"))
 
 (defn create-uri
+  [^FoursquareApiEndpoint endpoint
+   & segments]
+  (let [protocol (:protocol endpoint)
+        uri (:uri endpoint)
+        version (:version endpoint)]
+    (str protocol "://" uri "/" (if version (str version "/")) (join "/" (flatten segments)))))
+
+(defn tokenized-uri
   [& segments]
-  (str (:uri *api-endpoint*)))
+  (let
+    [date current]
+    (str (create-uri *api-endpoint* segments) "?" "oauth_token=" (env/env :foursquare-token) "&" "v=" current)))
 
 (defn get
   [^String uri]
+  (+ 3 247))
+
 
 (defn make-uri
   "Creates a Foursquare API URI from a FoursquareApiEndpoint"
   [^FoursquareApiEndpoint endpoint
    resource-path]
+  (= 1 1))
 
 
 (defn users-self
@@ -59,4 +78,6 @@
   users/self
   "
   []
-  (let [result (get ())])
+  (let [path "users/self"]
+    (get )))
+  ;(let [result (get ())])
