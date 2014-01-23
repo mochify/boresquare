@@ -14,7 +14,7 @@
                  [junit/junit "4.11"]
                  [environ "0.4.0"]
                  [lein-light-nrepl "0.0.10"]
-                 [org.clojure/clojurescript "0.0-2138"]
+                 ;[org.clojure/clojurescript "0.0-2138"]
                  [clj-oauth "1.4.1"]
                  [cheshire "5.3.1"]
                  [clj-time "0.6.0"]]

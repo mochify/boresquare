@@ -3,7 +3,8 @@
   (:require [environ.core :as env]
             [org.httpkit.client :as http]
             [cheshire.core :as json]
-            [clojure.string :refer [join]]))
+            [clojure.string :refer [join]])
+  (import [java.net URLEncoder]))
 
 ;; This wraps the Foursquare User API
 ;; https://developer.foursquare.com/docs/users/users
@@ -52,18 +53,26 @@
   (let [protocol (:protocol endpoint)
         uri (:uri endpoint)
         version (:version endpoint)]
-    (str protocol "://" uri "/" (if version (str version "/")) (join "/" (flatten segments)))))
+    (str protocol "://" uri "/" (if version (str version "/")) (join "/"  (flatten segments)))))
 
-(defn tokenized-uri
+(defn userless-uri
   [& segments]
   (let
     [date current]
-    (str (create-uri *api-endpoint* segments) "?" "oauth_token=" (env/env :foursquare-token) "&" "v=" current)))
+    (str (create-uri *api-endpoint* segments)
+         "?" "client_id=" (env/env :foursquare-client-id)
+         "&" "client_secret=" (env/env :foursquare-client-secret)
+         "&" "v=" current)))
+
+(defn authenticated-uri
+  [& segments]
+  (let
+    [date current]
+    (str (create-uri *api-endpoint* segments) "?" "oauth_token=" (URLEncoder/encode (env/env :foursquare-token)) "&" "v=" current)))
 
 (defn get
   [^String uri]
-  (+ 3 247))
-
+  (io! (json/decode (:body @(http/get uri {:accept :json :throw-exceptions false})) true)))
 
 (defn make-uri
   "Creates a Foursquare API URI from a FoursquareApiEndpoint"
@@ -71,6 +80,11 @@
    resource-path]
   (= 1 1))
 
+(defn leaderboard
+  "hits the leaderboard endpoint"
+  []
+  (let [result (get (authenticated-uri "users" "leaderboard"))]
+    result))
 
 (defn users-self
   "Returns information for the self user, hitting the endpoint:
@@ -78,6 +92,5 @@
   users/self
   "
   []
-  (let [path "users/self"]
-    (get )))
-  ;(let [result (get ())])
+  (let [result (get (authenticated-uri "users" "self"))]
+    result))
