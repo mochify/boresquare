@@ -10,7 +10,7 @@
             ))
 
 (defroutes app-routes
-  (GET "/" [] "Hello World")
+  (GET "/" [] "Hi hi")
   (GET "/listkeys" [] (listkeys))
   (GET "/user" [] "hello there")
   (route/resources "/")

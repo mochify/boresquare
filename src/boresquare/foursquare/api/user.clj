@@ -3,7 +3,9 @@
   (:require [environ.core :as env]
             [org.httpkit.client :as http]
             [cheshire.core :as json]
-            [clojure.string :refer [join]])
+            [clojure.string :refer [join]]
+            [clj-time.core :refer [now]]
+            [clj-time.format :refer [unparse, formatters]])
   (import [java.net URLEncoder]))
 
 ;; This wraps the Foursquare User API
@@ -36,7 +38,7 @@
 (defrecord FoursquareApiEndpoint
   [protocol uri version])
 
-(def ^{:const true} current (.format (java.text.SimpleDateFormat. "YYYYMMDD") (java.util.Date.)))
+(def ^{:const true} current (unparse (formatters :basic-date) (now)))
 
 (def ^{:const true} slash "/")
 (def ^{:const true} encoding "UTF-8")
@@ -53,7 +55,7 @@
   (let [protocol (:protocol endpoint)
         uri (:uri endpoint)
         version (:version endpoint)]
-    (str protocol "://" uri "/" (if version (str version "/")) (join "/"  (flatten segments)))))
+    (str protocol "://" uri slash (if version (str version slash)) (join slash  (flatten segments)))))
 
 (defn userless-uri
   [& segments]
@@ -84,6 +86,12 @@
   "hits the leaderboard endpoint"
   []
   (let [result (get (authenticated-uri "users" "leaderboard"))]
+    result))
+
+(defn requests
+  "Endpoint for the list of friend requests a user has"
+  []
+  (let [result (get (authenticated-uri "users" "requests"))]
     result))
 
 (defn users-self
