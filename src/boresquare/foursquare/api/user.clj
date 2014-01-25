@@ -70,11 +70,15 @@
   [& segments]
   (let
     [date current]
-    (str (create-uri *api-endpoint* segments) "?" "oauth_token=" (URLEncoder/encode (env/env :foursquare-token)) "&" "v=" current)))
+    (str (create-uri *api-endpoint* segments) "?" "oauth_token=" (URLEncoder/encode (env/env :foursquare-token)) "&v=" current)))
 
 (defn get
-  [^String uri]
-  (io! (json/decode (:body @(http/get uri {:accept :json :throw-exceptions false})) true)))
+  ([^String uri]
+    (io! (json/decode (:body @(http/get uri {:accept :json :throw-exceptions false})) true)))
+  ([^String uri &{:as params}]
+   (prn uri)
+   (prn params)
+    (io! (json/decode (:body @(http/get uri params)) true))))
 
 (defn make-uri
   "Creates a Foursquare API URI from a FoursquareApiEndpoint"
@@ -97,19 +101,95 @@
 (defn search
   "Locate friends with a bunch of parameters against the endpoint users/search
 
-   Options:
+   Parameters:
 
       * :phone seq(string) - a list of phone numbers to search by.
       * :email seq(string) - a list of email addresses to search by.
-      * :twitter - a list of Twitter handles to search.
-      * :twitterSource - a single Twitter handle.
+      * :twitter seq(string) - a list of Twitter handles to search.
+      * :twitterSource (string) - a single Twitter handle.
             Will return users that the handle follows on Twitter, who also use
-
+      * :fbid (seq(string)) - A list of Facebook user IDs to search
+      * :name (string): A name to search for
   "
-
-
   [& {:as params}]
-  )
+  (let [result (get (authenticated-uri "users" "search") :query-params params)]
+    result))
+
+(defn checkins
+  "Returns a history of checkins for a user.
+
+  Parameters:
+
+    * :limit (int) - number of results to return, up to 250 (default 100)
+    * :offset (int) - number of results to return, up to 250 (default 100)
+    * :sort (string) - sort the returned checkins, valid values are 'newestfirst' or 'oldestfirst' (default 'newestfirst')
+    * :afterTimestamp - retrieve the first results that follow this value. The value is seconds after epoch.
+    * :beforeTimestamp - retrieve the first results before this epoch time.
+  "
+  [& {:as params}]
+  (let [result (get (authenticated-uri "users" "self" "checkins") :query-params params)]
+    result))
+
+(defn friends
+  "Returns an array of a user's friends
+
+  Parameters:
+
+    * :limit (int) - number of results to return, up to 500
+    * :offset (int) - Used to page through results.
+  "
+  [user & {:as params}]
+  (let [result (get (authenticated-uri "users" user "friends") :query-params params)]
+    result))
+
+(defn mayorships
+  "Returns a user's mayorships"
+  [user]
+  (let [result (get (authenticated-uri "users" user "mayorships"))]
+    result))
+
+(defn badges
+  "Returns a user's badges"
+  [user]
+  (let [result (get (authenticated-uri "users" user "badges"))]
+    result))
+
+(defn lists
+  "Returns lists associated with a user.
+
+  Parameters:
+
+    * :group (string) - Can be one of the following, 'created', 'edited', 'followed', 'friends', or 'suggested'
+    * :ll (geographic coordinate) - Location of the user. Necessary if you specify :group 'suggested'
+  "
+  [user &{:as params}]
+  (let [result (get (authenticated-uri "users" user "lists"))]
+    result))
+
+(defn photos
+  "Returns photos a user has uploaded.
+
+  Parameters:
+
+    * :limit (int) - Number of results to return. Default 100, max 500.
+    * :offset (int) - Used to page through results. Default 100.
+  "
+  [user &{:as params}]
+  (let [result (get (authenticated-uri "users" user "photos"))]
+    result))
+
+(defn venuehistory
+  "Returns a list of venues visited by a user, including count and last visit.
+
+  Parameters:
+
+    * :beforeTimestamp (int) - Seconds since epoch.
+    * :afterTimestamp (int) - Seconds after epoch.
+    * :categoryId (string) - Limits returned venues to this category. If a top-level category is specified, all sub-categories will match.
+  "
+  [user &{:as params}]
+  (let [result (get (authenticated-uri "users" user "venuehistory"))]
+    result))
 
 (defn users-self
   "Returns information for the self user, hitting the endpoint:
@@ -118,4 +198,5 @@
   "
   []
   (let [result (get (authenticated-uri "users" "self"))]
+    (print "hello")
     result))
