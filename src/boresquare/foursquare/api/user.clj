@@ -94,6 +94,23 @@
   (let [result (get (authenticated-uri "users" "requests"))]
     result))
 
+(defn search
+  "Locate friends with a bunch of parameters against the endpoint users/search
+
+   Options:
+
+      * :phone seq(string) - a list of phone numbers to search by.
+      * :email seq(string) - a list of email addresses to search by.
+      * :twitter - a list of Twitter handles to search.
+      * :twitterSource - a single Twitter handle.
+            Will return users that the handle follows on Twitter, who also use
+
+  "
+
+
+  [& {:as params}]
+  )
+
 (defn users-self
   "Returns information for the self user, hitting the endpoint:
 
