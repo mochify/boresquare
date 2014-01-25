@@ -1,14 +1,29 @@
 (defproject boresquare "0.1.0-SNAPSHOT"
-  :description "Where were you on a given date?"
-  :url "http://example.com/FIXME"
- :license {
-    :name "Apache License, version 2.0"
-    :url "http://www.apache.org/licenses/LICENSE-2.0"}
+  :description "Awesome Foursquare enhancements for you."
+  :url "http://mochify.github.io/boresquare"
   :dependencies [[org.clojure/clojure "1.5.1"]
+                 [com.mochify/hiroba "0.1.0-SNAPSHOT"]
                  [compojure "1.1.6"]
-                 [enlive "1.1.5"]]
-  :plugins [[lein-ring "0.8.8"]]
-  :ring {:handler boresquare.handler/app}
+                 [ring "1.2.1"]
+                 [enlive "1.1.5"]
+                 [http-kit "2.1.16"]
+                 [com.taoensso/carmine "2.4.0"]
+                 [korma "0.3.0-RC6"]
+                 [org.xerial/sqlite-jdbc "3.7.2"]
+                 [info.cukes/cucumber-junit "1.1.5"]
+                 [info.cukes/cucumber-clojure "1.1.5"]
+                 [junit/junit "4.11"]
+                 [environ "0.4.0"]
+                 [lein-light-nrepl "0.0.10"]
+                 ;[org.clojure/clojurescript "0.0-2138"]
+                 [clj-oauth "1.4.1"]
+                 [cheshire "5.3.1"]
+                 [clj-time "0.6.0"]]
+  ;:repl-options {:nrepl-middleware [lighttable.nrepl.handler/lighttable-ops]}
+  :plugins [[lein-ring "0.8.8"]
+            [lein-environ "0.4.0"]]
+  :ring {:handler boresquare.routes/app}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
-                        [ring-mock "0.1.5"]]}})
+                        [ring-mock "0.1.5"]
+                        [criterium "0.4.3"]]}})
