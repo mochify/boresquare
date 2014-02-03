@@ -2,7 +2,7 @@
   :description "Awesome Foursquare enhancements for you."
   :url "http://mochify.github.io/boresquare"
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [com.mochify/hiroba "0.1.0-SNAPSHOT"]
+                 [com.mochify/hiroba "0.1.0-alpha"]
                  [compojure "1.1.6"]
                  [ring "1.2.1"]
                  [enlive "1.1.5"]
